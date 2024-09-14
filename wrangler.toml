@@ -1,0 +1,11 @@
+name = "durable-ordering"
+main = "src/index.ts"
+compatibility_date = "2024-09-09"
+
+[[durable_objects.bindings]]
+name = "Incrementer"
+class_name = "Incrementer"
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["Incrementer"]
