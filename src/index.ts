@@ -37,7 +37,7 @@ export default {
     if (url.pathname === "/increment" || url.pathname === "/reset") {
       const id = env.Incrementer.idFromName("some-id");
       const stub = env.Incrementer.get(id);
-      return stub.fetch(request);
+      return await stub.fetch(request);
     }
     return new Response("visit /increment");
   },
