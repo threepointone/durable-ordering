@@ -17,13 +17,14 @@ export class Incrementer extends DurableObject {
       return new Response("reset");
     }
 
-    const count = await this.ctx.blockConcurrencyWhile(async () => {
+    // await sleep(20);
+
+    return this.ctx.blockConcurrencyWhile(async () => {
       await sleep(Math.random() * 400);
       const count = (await this.ctx.storage.get<number | null>("count")) || 0;
       await this.ctx.storage.put("count", count + 1);
-      return count + 1;
+      return new Response((count + 1).toString());
     });
-    return new Response(count.toString());
   }
 }
 
@@ -37,7 +38,10 @@ export default {
     if (url.pathname === "/increment" || url.pathname === "/reset") {
       const id = env.Incrementer.idFromName("some-id");
       const stub = env.Incrementer.get(id);
-      return await stub.fetch(request);
+      const res = await stub.fetch(request);
+      const responseText = await res.text();
+      console.log("returning", responseText);
+      return new Response(responseText);
     }
     return new Response("visit /increment");
   },
